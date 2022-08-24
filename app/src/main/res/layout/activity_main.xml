@@ -1,42 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <include
+        android:id="@+id/action_bar_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/action_bar"
+        />
+
+    <include
+        android:id="@+id/fixed_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/fixed_header_scroll"
+        app:layout_constraintBottom_toTopOf="@id/rvGuestList"
+        app:layout_constraintTop_toBottomOf="@id/action_bar_header"
+        />
+
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTodoItems"
+        android:id="@+id/rvGuestList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/etTodoTitle"
+        app:layout_constraintBottom_toTopOf="@+id/etGuestTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/fixed_header"
+        />
 
     <EditText
-        android:id="@+id/etTodoTitle"
+        android:id="@+id/etGuestTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Enter Todo Title"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnAddTodo"
+        android:hint="Enter Guest Title"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddGuest"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btnAddTodo"
+        android:id="@+id/btnAddGuest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Todo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnDeleteDoneTodos" />
+        android:layout_marginBottom="15dp"
+        android:text="Add Guest"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/btnDeleteDoneTodos"
-        android:layout_width="wrap_content"
+        android:id="@+id/btnContinue"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Delete done"
+        android:layout_margin="15dp"
+        android:background="@drawable/round_button"
+        android:text="Continue"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
