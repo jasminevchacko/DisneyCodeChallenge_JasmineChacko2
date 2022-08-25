@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_guest.view.*
 
-class GuestAdapter(
+class GuestAdapter (
     private val guests: MutableList<Guest>
 ) : RecyclerView.Adapter<GuestAdapter.GuestViewHolder>() {
 
@@ -20,11 +20,6 @@ class GuestAdapter(
                 false
             )
         )
-    }
-
-    fun addGuest(guest: Guest) {
-        guests.add(guest)
-        notifyItemInserted(guests.size - 1)
     }
 
     override fun onBindViewHolder(holder: GuestViewHolder, position: Int) {

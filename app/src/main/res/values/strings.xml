@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">Guest Reservations</string>
     <string name="main_activity_title">Select Guests</string>
+    <string name="have_reservation_title">These Guests Have Reservations</string>
+    <string name="no_reservation_title">These Guests Need Reservations</string>
+    <string name="info_text">
+        At least one Guest in the party must have a reservation. Guests without reservations
+        must remain in the same booking party in order to enter.
+    </string>
 </resources>
