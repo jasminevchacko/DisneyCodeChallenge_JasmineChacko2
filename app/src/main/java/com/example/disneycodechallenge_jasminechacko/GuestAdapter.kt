@@ -33,6 +33,10 @@ class GuestAdapter (
     override fun getItemCount(): Int {
         return guests.size
     }
+
+    fun getGuestList(): MutableList<Guest> {
+        return guests
+    }
 }
 
 

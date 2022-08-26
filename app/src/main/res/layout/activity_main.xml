@@ -82,6 +82,8 @@
                 android:drawableLeft="@android:drawable/ic_dialog_info"
                 android:text="@string/info_text"
                 android:textColor="#000000"
+                android:textSize="14sp"
+                app:drawableTint="#000000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rv_noReservationList" />

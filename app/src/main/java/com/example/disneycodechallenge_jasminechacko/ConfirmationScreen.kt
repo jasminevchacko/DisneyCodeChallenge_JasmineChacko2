@@ -5,9 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.iterator
 import kotlinx.android.synthetic.main.activity_main.*
 
-class ConflictScreen : AppCompatActivity() {
+class ConfirmationScreen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.conflict_screen)
+        setContentView(R.layout.confirmation_screen)
     }
 }
