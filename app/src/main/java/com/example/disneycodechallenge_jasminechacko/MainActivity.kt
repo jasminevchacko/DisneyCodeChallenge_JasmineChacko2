@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.CheckBox
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.disneycodechallenge_jasminechacko.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.rvGuestList
 import kotlinx.android.synthetic.main.activity_main.rv_noReservationList
@@ -20,6 +22,7 @@ import kotlinx.android.synthetic.main.item_guest.view.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
     private lateinit var guestsWithReservationsAdapter: GuestAdapter
     private lateinit var guestsWithoutReservationsAdapter: GuestAdapter
     private lateinit var allGuests: MutableList<Guest>
@@ -27,11 +30,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         createGuestList()
-         val guestsWithReservationsList = createGuestWithReservationList()
-         val guestsWithoutReservationsList = createGuestWithoutReservationList()
+        val guestsWithReservationsList = createGuestWithReservationList()
+        val guestsWithoutReservationsList = createGuestWithoutReservationList()
         guestsWithReservationsAdapter = GuestAdapter(guestsWithReservationsList)
         guestsWithoutReservationsAdapter = GuestAdapter(guestsWithoutReservationsList)
 
@@ -50,30 +53,20 @@ class MainActivity : AppCompatActivity() {
             tv_info.visibility = View.GONE
         }
 
-        val buttonClick = findViewById<Button>(R.id.btnContinue)
-        buttonClick.setOnClickListener {
-            var guestWithReservationList = guestsWithReservationsAdapter.getGuestList()
-            var guestWithoutReservationList = guestsWithoutReservationsAdapter.getGuestList()
+        if (savedInstanceState != null) {
+            savedInstanceState.get(guestsWithReservationsList.toString())
+        }
+
+        binding.btnContinue.setOnClickListener {
 
             var guestWithReservationCount = 0
             var guestWithoutReservationCount = 0
 
-//            for (guest in allGuests) {
-//                if (guest.hasReservation && guest.isChecked) {
-//                    guestWithReservationCount += 1
-//                } else if (!guest.hasReservation && guest.isChecked) {
-//                    guestWithoutReservationCount += 1
-//                }
-//            }
 
-            for (guest in guestWithReservationList) {
+            for (guest in allGuests) {
                 if (guest.hasReservation && guest.isChecked) {
                     guestWithReservationCount += 1
-                }
-            }
-
-            for (guest in guestWithoutReservationList) {
-                if (!guest.hasReservation && guest.isChecked) {
+                } else if (!guest.hasReservation && guest.isChecked) {
                     guestWithoutReservationCount += 1
                 }
             }
@@ -83,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             } else if (guestWithReservationCount == 0 && guestWithoutReservationCount >= 0) {
                 Intent(this, ConflictScreen::class.java)
             } else {
-                Intent(this, ConflictScreen::class.java)
+                Intent(this, NoReservationScreen::class.java)
             }
 
             startActivity(intent)
@@ -112,7 +105,10 @@ class MainActivity : AppCompatActivity() {
         val guest16 = Guest("Jim Halpert", false, false)
 
         allGuests = mutableListOf(
+            // with reservations
             guest1, guest2, guest3, guest4, guest5, guest6, guest15,
+
+            // without reservations
             guest7, guest8, guest9, guest10, guest11, guest12, guest13, guest14, guest16
         )
     }
@@ -143,9 +139,12 @@ class MainActivity : AppCompatActivity() {
         val checkBox = view.findViewById<CheckBox>(R.id.cbCheckGuest)
 
         if (checkBox.isChecked) {
-
+            for (guest in this.allGuests) {
+                if (guest.title == this.tvGuestTitle.toString()) {
+                    guest.isChecked = true
+                }
+            }
         }
-        checkBox.isChecked
-        guestsWithReservationsAdapter.getGuestList()
+        // guestsWithReservationsAdapter.getGuestList()
     }
 }

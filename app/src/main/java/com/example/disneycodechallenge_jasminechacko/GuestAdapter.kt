@@ -3,14 +3,13 @@ package com.example.disneycodechallenge_jasminechacko
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_guest.view.*
 
-class GuestAdapter (
+class GuestAdapter(
     private val guests: MutableList<Guest>
-) : RecyclerView.Adapter<GuestAdapter.GuestViewHolder>() {
-
-    class GuestViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    ) : RecyclerView.Adapter<GuestAdapter.GuestViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GuestViewHolder {
         return GuestViewHolder(
@@ -36,6 +35,16 @@ class GuestAdapter (
 
     fun getGuestList(): MutableList<Guest> {
         return guests
+    }
+
+    inner class GuestViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var checkbox = itemView.cbCheckGuest
+
+        init {
+            checkbox.setOnClickListener {
+                guests[adapterPosition].isChecked = !guests[adapterPosition].isChecked
+            }
+        }
     }
 }
 

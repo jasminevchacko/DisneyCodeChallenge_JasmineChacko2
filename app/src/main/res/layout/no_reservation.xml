@@ -9,7 +9,7 @@
         android:id="@+id/no_reservation_screen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is the conflict screen!"
+        android:text="This is the no one had reservations screen!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
