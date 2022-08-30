@@ -7,4 +7,8 @@
         At least one Guest in the party must have a reservation. Guests without reservations
         must remain in the same booking party in order to enter.
     </string>
+    <string name="reservation_needed_title">Reservation Needed</string>
+    <string name="reservation_needed_text">
+        Select at least one Guest that has a reservation to continue
+    </string>
 </resources>

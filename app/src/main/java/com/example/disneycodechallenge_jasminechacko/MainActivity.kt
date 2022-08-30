@@ -4,12 +4,17 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
+import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.CheckBox
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.disneycodechallenge_jasminechacko.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.SnackbarContentLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.rvGuestList
 import kotlinx.android.synthetic.main.activity_main.rv_noReservationList
@@ -19,6 +24,8 @@ import kotlinx.android.synthetic.main.activity_main.tv_noReservationTitle
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.item_guest.*
 import kotlinx.android.synthetic.main.item_guest.view.*
+import android.R.drawable.ic_menu_close_clear_cancel
+import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,50 +45,71 @@ class MainActivity : AppCompatActivity() {
         guestsWithReservationsAdapter = GuestAdapter(guestsWithReservationsList)
         guestsWithoutReservationsAdapter = GuestAdapter(guestsWithoutReservationsList)
 
-         if (guestsWithReservationsAdapter.itemCount != 0) {
+        displayReservationLabels(this,
+            guestsWithReservationsAdapter,
+            guestsWithoutReservationsAdapter)
+
+        binding.btnContinue.setOnClickListener {
+            determineNextScreen(it)
+        }
+    }
+
+    private fun displayReservationLabels(activity: MainActivity,
+                                         guestsWithReservationsAdapter: GuestAdapter,
+                                         guestsWithoutReservationsAdapter: GuestAdapter) {
+
+        if (guestsWithReservationsAdapter.itemCount != 0) {
             rvGuestList.adapter = guestsWithReservationsAdapter
-            rvGuestList.layoutManager = LinearLayoutManager(this)
+            rvGuestList.layoutManager = LinearLayoutManager(activity)
         } else {
             tv_haveReservationTitle.visibility = View.GONE
         }
 
-         if (guestsWithoutReservationsAdapter.itemCount != 0) {
+        if (guestsWithoutReservationsAdapter.itemCount != 0) {
             rv_noReservationList.adapter = guestsWithoutReservationsAdapter
-            rv_noReservationList.layoutManager = LinearLayoutManager(this)
+            rv_noReservationList.layoutManager = LinearLayoutManager(activity)
         } else {
             tv_noReservationTitle.visibility = View.GONE
             tv_info.visibility = View.GONE
         }
+    }
 
-        if (savedInstanceState != null) {
-            guestsWithReservationsList = savedInstanceState.get(guestsWithReservationsList.toString()) as MutableList<Guest>
-            guestsWithoutReservationsList = savedInstanceState.get(guestsWithoutReservationsList.toString()) as MutableList<Guest>
+    private fun determineNextScreen(view: View) {
+        var guestWithReservationCount = 0
+        var guestWithoutReservationCount = 0
+
+        for (guest in allGuests) {
+            if (guest.hasReservation && guest.isChecked) {
+                guestWithReservationCount += 1
+            } else if (!guest.hasReservation && guest.isChecked) {
+                guestWithoutReservationCount += 1
+            }
         }
 
-        binding.btnContinue.setOnClickListener {
-
-            var guestWithReservationCount = 0
-            var guestWithoutReservationCount = 0
-
-
-            for (guest in allGuests) {
-                if (guest.hasReservation && guest.isChecked) {
-                    guestWithReservationCount += 1
-                } else if (!guest.hasReservation && guest.isChecked) {
-                    guestWithoutReservationCount += 1
-                }
-            }
-
-            val intent = if (guestWithReservationCount > 0 && guestWithoutReservationCount == 0) {
-                Intent(this, ConfirmationScreen::class.java)
-            } else if (guestWithReservationCount == 0 && guestWithoutReservationCount >= 0) {
-                Intent(this, NoReservationScreen::class.java)
-            } else {
-                Intent(this, ConflictScreen::class.java)
-            }
-
-            startActivity(intent)
+        if (guestWithReservationCount > 0 && guestWithoutReservationCount == 0) {
+            startActivity(Intent(this, ConfirmationScreen::class.java))
+        } else if (guestWithReservationCount > 0 && guestWithoutReservationCount > 0) {
+            startActivity(Intent(this, ConflictScreen::class.java))
+        } else {
+            displaySnackBar(view)
         }
+    }
+
+    private fun displaySnackBar(view: View) {
+        val noReservationSnackBar = Snackbar
+            .make(view, R.string.reservation_needed_text, Snackbar.LENGTH_LONG)
+        val textView = noReservationSnackBar.view.findViewById(R.id.snackbar_action) as TextView
+        textView.isAllCaps = false
+        val imgClose = ImageView(baseContext)
+        imgClose.scaleType = ImageView.ScaleType.CENTER_INSIDE
+        val layImageParams = ViewGroup.LayoutParams(WRAP_CONTENT, MATCH_PARENT)
+        imgClose.setImageResource(ic_menu_close_clear_cancel)
+        (textView.parent as SnackbarContentLayout).addView(imgClose, layImageParams)
+        imgClose.setOnClickListener {
+            noReservationSnackBar.dismiss()
+        }
+
+        noReservationSnackBar.show()
     }
 
     private fun createGuestList() {
